@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
-import { Trash2, Edit, Clock, Calendar, TrendingUp } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
+import { Trash2, Edit, Clock, Calendar, TrendingUp, DollarSign, Building2 } from "lucide-react"
 import type { Schedule } from "../types/schedule"
 
 interface ScheduleListProps {
@@ -54,12 +55,30 @@ export default function ScheduleList({ schedules, onDelete, onEdit, onToggleActi
           <Card key={schedule.id} className={`transition-all ${!schedule.isActive ? "opacity-60" : ""}`}>
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <CardTitle className="text-lg flex items-center gap-2">
                     <TrendingUp className="h-5 w-5" />
-                    {schedule.ric}
+                    {schedule.instrument.ticker} ({schedule.instrument.ric})
                   </CardTitle>
                   <CardDescription>{schedule.description || "Sin descripción"}</CardDescription>
+
+                  {/* Información del instrumento */}
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <Badge variant="secondary" className="text-xs">
+                      <Building2 className="h-3 w-3 mr-1" />
+                      {schedule.instrument.mercado}
+                    </Badge>
+                    <Badge variant="secondary" className="text-xs">
+                      <DollarSign className="h-3 w-3 mr-1" />
+                      {schedule.instrument.moneda}
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Caja: {schedule.instrument.cajaValor}
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Plazo: {schedule.instrument.plazo}h
+                    </Badge>
+                  </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Switch checked={schedule.isActive} onCheckedChange={() => onToggleActive(schedule.id)} />
@@ -78,7 +97,10 @@ export default function ScheduleList({ schedules, onDelete, onEdit, onToggleActi
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <Separator className="mb-4" />
+
+              {/* Información de horario */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-4">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="font-medium">{schedule.day}</span>
@@ -91,6 +113,32 @@ export default function ScheduleList({ schedules, onDelete, onEdit, onToggleActi
                   <Badge variant="outline">{getIterationLabel(schedule.iterationTime)}</Badge>
                 </div>
               </div>
+
+              {/* Detalles completos del instrumento */}
+              <div className="bg-muted/50 rounded-lg p-3 space-y-2">
+                <h4 className="text-sm font-semibold text-muted-foreground">Detalles del Instrumento</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+                  <div>
+                    <span className="font-medium">RIC:</span> {schedule.instrument.ric}
+                  </div>
+                  <div>
+                    <span className="font-medium">Ticker:</span> {schedule.instrument.ticker}
+                  </div>
+                  <div>
+                    <span className="font-medium">Mercado:</span> {schedule.instrument.mercado}
+                  </div>
+                  <div>
+                    <span className="font-medium">Caja Valor:</span> {schedule.instrument.cajaValor}
+                  </div>
+                  <div>
+                    <span className="font-medium">Plazo:</span> {schedule.instrument.plazo}h
+                  </div>
+                  <div>
+                    <span className="font-medium">Moneda:</span> {schedule.instrument.moneda}
+                  </div>
+                </div>
+              </div>
+
               <div className="mt-3 pt-3 border-t text-xs text-muted-foreground">
                 Creado: {schedule.createdAt.toLocaleDateString("es-ES")}
               </div>

@@ -54,6 +54,11 @@ export default function InvestmentScheduleManager() {
     setActiveTab("list")
   }
 
+  // Estadísticas actualizadas
+  const uniqueInstruments = new Set(schedules.map((s) => s.instrument.ticker)).size
+  const uniqueMarkets = new Set(schedules.map((s) => s.instrument.mercado)).size
+  const uniqueCurrencies = new Set(schedules.map((s) => s.instrument.moneda)).size
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-6xl mx-auto space-y-6">
@@ -111,10 +116,10 @@ export default function InvestmentScheduleManager() {
           </TabsContent>
         </Tabs>
 
-        {/* Stats Footer */}
+        {/* Stats Footer Actualizado */}
         {schedules.length > 0 && (
           <div className="bg-white rounded-lg p-6 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-blue-600">{schedules.length}</div>
                 <div className="text-sm text-gray-600">Total Schedules</div>
@@ -124,8 +129,16 @@ export default function InvestmentScheduleManager() {
                 <div className="text-sm text-gray-600">Activos</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-orange-600">{new Set(schedules.map((s) => s.ric)).size}</div>
-                <div className="text-sm text-gray-600">Instrumentos Únicos</div>
+                <div className="text-2xl font-bold text-orange-600">{uniqueInstruments}</div>
+                <div className="text-sm text-gray-600">Instrumentos</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-purple-600">{uniqueMarkets}</div>
+                <div className="text-sm text-gray-600">Mercados</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-teal-600">{uniqueCurrencies}</div>
+                <div className="text-sm text-gray-600">Monedas</div>
               </div>
             </div>
           </div>
